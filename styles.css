@@ -1,0 +1,145 @@
+:root {
+    --row_cols: 10;
+    --cell-size: 50px;
+}
+
+body {
+    background-color: rgb(196, 196, 196);
+}
+
+header {
+    font-size: 50px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--row_cols), var(--cell-size));
+    grid-template-rows: repeat(var(--row_cols), var(--cell-size));
+    border: 4px solid rgb(75, 99, 74);
+}
+
+[id^='cell'] {
+    border: 1px solid rgb(75, 99, 74);
+    background-color: rgb(119, 116, 116);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+
+[id^='cell']:hover {
+    background-color: rgb(77, 77, 77);
+}
+
+.mines {
+    font-size: 30px;
+    margin-top: 10px;
+    display: none;
+}
+
+.modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0);
+}
+
+.open-modal {
+    animation: show-modal 1s linear forwards;
+}
+
+@keyframes show-modal {
+    80% {
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-modal {
+    opacity: 1;
+    transform: scale(1);
+    animation: hide-modal 1s linear forwards;
+}
+
+@keyframes hide-modal {
+    to {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 20px;
+}
+
+.mines-select {
+    margin: 20px auto;
+}
+
+#start-btn {
+    background-color: rgb(241, 183, 95);
+    color: black;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    transition-duration: .5s;
+    padding: 5px 10px;
+}
+
+#start-btn:hover {
+    background-color: rgb(219, 158, 66);
+    color: white;
+}
+
+#start-btn:focus {
+    box-shadow: 0 0 3px 3px rgb(255, 153, 0);
+}
+
+#mines-number {
+    font-size: 16px;
+    outline: none;
+}
+
+.info {
+    background-color: rgb(231, 231, 90);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    margin: 5px auto;
+}
+
+@media only screen and (max-width:550px) {
+    :root {
+        --cell-size: 40px
+    }
+}
+
+@media only screen and (max-width:400px) {
+    :root {
+        --cell-size: 30px
+    }
+}
