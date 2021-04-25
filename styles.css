@@ -136,10 +136,19 @@ main {
     :root {
         --cell-size: 40px
     }
+    header {
+        font-size: 40px;
+    }
 }
 
-@media only screen and (max-width:400px) {
+@media only screen and (max-width:450px) {
     :root {
         --cell-size: 30px
+    }
+    header {
+        font-size: 30px;
+    }
+    .mines {
+        font-size: 20px;
     }
 }

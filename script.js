@@ -4,28 +4,29 @@ const modal = document.querySelector('.modal')
 const mines_number = document.getElementById('mines-number')
 const minesDiv = document.querySelector('.mines')
 const row_cols = 10
-var mines = 15
+var mines, opened
 var grid = []
-var opened = 0
 
 renderGrid()
 openModal()
 
 startGame = () => {
-    mines = 15
     opened = 0
     renderGrid()
+    fixMines()
     placeMines()
-
-    console.table(grid)
-    console.log(mines)
-    
     closeModal()
+    //console.table(grid)
+    //console.log(mines)
 }
 
 endGame = (msg) => {
     document.getElementById('msg').innerText = msg
     document.getElementById('start-btn').innerText = 'Play Again'
+    if(msg === 'Game Over!')
+        document.querySelector('.content').style.backgroundColor = 'rgb(241, 31, 31)'
+    else
+        document.querySelector('.content').style.backgroundColor = 'lightgreen'
     openModal()
 }
 
