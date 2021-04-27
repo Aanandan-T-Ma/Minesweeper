@@ -1,6 +1,7 @@
 const game_grid = document.querySelector('.game-grid')
 const mines_left = document.querySelector('#mines-left')
 const modal = document.querySelector('.modal')
+const game_area = document.querySelector('.game-area')
 const mines_number = document.getElementById('mines-number')
 const minesDiv = document.querySelector('.mines')
 const row_cols = 10
@@ -131,11 +132,13 @@ function showMines(){
 function openModal(){
     modal.classList.add('open-modal')
     modal.classList.remove('close-modal')
+    game_area.style.filter = 'blur(2px)'
 }
 
 function closeModal(){
     modal.classList.remove('open-modal')
     modal.classList.add('close-modal')
+    game_area.style.filter = 'blur(0px)'
 }
 
 function fixMines(){
