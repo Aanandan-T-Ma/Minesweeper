@@ -152,3 +152,16 @@ main {
         font-size: 20px;
     }
 }
+
+#hold {
+    display: none;
+}
+
+@media only screen and (max-width:800px) {
+    #right-click {
+        display: none;
+    }
+    #hold {
+        display: inline;
+    }
+}

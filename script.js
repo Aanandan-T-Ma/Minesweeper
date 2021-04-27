@@ -38,7 +38,8 @@ function renderGrid(){
         for(let j=0;j<row_cols;j++){
             let div = document.createElement('div')
             div.id = 'cell-'+i+j
-            div.setAttribute('onmousedown', 'show(event)')
+            div.setAttribute('onclick', 'show(event)')
+            div.setAttribute('oncontextmenu', 'flag(event)')
             game_grid.appendChild(div)
             row.push(0)
         }
@@ -81,35 +82,45 @@ function show(event){
     let i = Number(id[5])
     let j = Number(id[6])
     let cell = document.getElementById(id)
-    if(event.button == 0){
-        if(cell.innerHTML) 
-            return
-        if(grid[i][j] != -1){
-            cell.innerHTML = grid[i][j]
-            opened++
-            if(opened === row_cols*row_cols - mines){
-                showMines()
-                endGame('You won!')
-            }
-        }
-        else{
-            cell.style.backgroundColor = 'red'
-            endGame('Game Over!')
+    if(cell.innerHTML) return
+    if(grid[i][j] != -1){
+        cell.innerHTML = grid[i][j]
+        cell.style.backgroundColor = 'rgb(180, 180, 180)'
+        opened++
+        if(opened === row_cols*row_cols - mines){
+            showMines()
+            endGame('You won!')
         }
     }
-    else if(event.button == 2){
-        if(cell.innerHTML)
-            cell.innerHTML = ''
-        else
-            cell.innerHTML = '&#128681;'
+    else{
+        cell.style.backgroundColor = 'red'
+        cell.innerHTML = '&#128163;'
+        endGame('Game Over!')
+    }
+}
+
+function flag(event){
+    event.preventDefault()
+    let cell = document.getElementById(event.target.id)
+    if(cell.innerHTML && !isNaN(cell.innerHTML)) return
+    if(cell.innerHTML){
+        cell.innerHTML = ''
+        cell.style.backgroundColor = 'rgb(119, 116, 116)'
+    }
+    else{
+        cell.innerHTML = '&#128681;'
+        cell.style.backgroundColor = 'rgb(100, 50, 50)'
     }
 }
 
 function showMines(){
     for(let i=0;i<row_cols;i++){
         for(let j=0;j<row_cols;j++){
-            if(grid[i][j] == -1)
-                document.getElementById('cell-'+i+j).style.backgroundColor = 'red'
+            if(grid[i][j] == -1){
+                let cell = document.getElementById('cell-'+i+j)
+                cell.style.backgroundColor = 'red'
+                cell.innerHTML = '&#128163;'
+            }
         }
     }
 }
@@ -126,8 +137,4 @@ function closeModal(){
 
 function fixMines(){
     mines = Number(mines_number.value)
-}
-
-function preventRightClick(event){
-    event.preventDefault()
 }
