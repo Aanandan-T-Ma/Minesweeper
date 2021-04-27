@@ -5,7 +5,7 @@ const mines_number = document.getElementById('mines-number')
 const minesDiv = document.querySelector('.mines')
 const row_cols = 10
 var mines, opened
-var grid = []
+var grid = [], visited = []
 
 renderGrid()
 openModal()
@@ -24,17 +24,19 @@ endGame = (msg) => {
     document.getElementById('msg').innerText = msg
     document.getElementById('start-btn').innerText = 'Play Again'
     if(msg === 'Game Over!')
-        document.querySelector('.content').style.backgroundColor = 'rgb(241, 31, 31)'
+        document.querySelector('#msg').style.color = 'red'
     else
-        document.querySelector('.content').style.backgroundColor = 'lightgreen'
+        document.querySelector('#msg').style.color = 'green'
     openModal()
 }
 
 function renderGrid(){
     game_grid.innerHTML = ''
     grid = []
+    visited = []
     for(let i=0;i<row_cols;i++){
         let row = []
+        let v = []
         for(let j=0;j<row_cols;j++){
             let div = document.createElement('div')
             div.id = 'cell-'+i+j
@@ -42,8 +44,10 @@ function renderGrid(){
             div.setAttribute('oncontextmenu', 'flag(event)')
             game_grid.appendChild(div)
             row.push(0)
+            v.push(false)
         }
         grid.push(row)
+        visited.push(v)
     }
 }
 
@@ -84,9 +88,7 @@ function show(event){
     let cell = document.getElementById(id)
     if(cell.innerHTML) return
     if(grid[i][j] != -1){
-        cell.innerHTML = grid[i][j]
-        cell.style.backgroundColor = 'rgb(180, 180, 180)'
-        opened++
+        showAround(i, j, 0)
         if(opened === row_cols*row_cols - mines){
             showMines()
             endGame('You won!')
@@ -95,6 +97,7 @@ function show(event){
     else{
         cell.style.backgroundColor = 'red'
         cell.innerHTML = '&#128163;'
+        cell.classList.add('show-bomb')
         endGame('Game Over!')
     }
 }
@@ -109,7 +112,7 @@ function flag(event){
     }
     else{
         cell.innerHTML = '&#128681;'
-        cell.style.backgroundColor = 'rgb(100, 50, 50)'
+        cell.style.backgroundColor = 'black'
     }
 }
 
@@ -118,8 +121,8 @@ function showMines(){
         for(let j=0;j<row_cols;j++){
             if(grid[i][j] == -1){
                 let cell = document.getElementById('cell-'+i+j)
-                cell.style.backgroundColor = 'red'
                 cell.innerHTML = '&#128163;'
+                cell.style.backgroundColor = 'black'
             }
         }
     }
@@ -137,4 +140,32 @@ function closeModal(){
 
 function fixMines(){
     mines = Number(mines_number.value)
+}
+
+function showAround(i, j, delay){
+    //console.log(i, j)
+    if(i < 0 || j < 0 || i == row_cols || j == row_cols || visited[i][j])
+        return
+    let cell = document.getElementById('cell-'+i+j)
+    //console.log(cell.innerHTML)
+    if(cell.innerHTML == '🚩') return
+    visited[i][j] = true
+    if(grid[i][j] != -1){
+        cell.classList.add('show-cell')
+        cell.style.animationDelay = delay + 's'
+        opened++
+    }
+    if(grid[i][j] > 0)
+        cell.innerHTML = grid[i][j]
+    else if(grid[i][j] == 0){
+        delay += .05
+        showAround(i-1, j-1, delay)
+        showAround(i-1, j, delay)
+        showAround(i-1, j+1, delay)
+        showAround(i, j-1, delay)
+        showAround(i, j+1, delay)
+        showAround(i+1, j-1, delay)
+        showAround(i+1, j, delay)
+        showAround(i+1, j+1, delay)
+    }
 }
